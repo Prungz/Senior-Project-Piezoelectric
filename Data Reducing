@@ -1,0 +1,52 @@
+%"D:\Senior LAb\CSV_5100\1_6_140_5100_1.csv"
+% MATLAB script to read a .csv file
+clf
+clear
+testing = "3800"
+
+for fi=1:5
+    % Specify the file name
+    filename = "D:\Senior LAb\Varies_RR\" ; % Change this to your actual file name
+    tite = testing + '_Rev_0' + string(fi) + '.csv'
+    openfile = filename + tite
+    
+    % Read the CSV file into a table
+    dataTable = readtable(openfile);
+    
+    % Display the first few rows
+    disp('First few rows of the CSV file:');
+    head(dataTable);
+    
+    % If the file contains numerical data, you can convert it into an array
+    dataArray = table2array(dataTable);
+    
+    % Display the array
+    disp('Data in array format:');
+    disp(dataArray);
+
+    firstPos = 1000;
+    lastPos = -9999;
+    for i=1:size(dataArray)
+         if dataArray(i,2)> 0
+             dataArray(i,2);
+            if and(firstPos > dataArray(i,1), dataArray(i,2) > 0.001)
+                firstPos = dataArray(i,1);
+            end
+            if and(lastPos < dataArray(i,1),dataArray(i,2) > 0.00)
+                lastPos = dataArray(i,1);
+            end
+         end
+    end
+    firstPos    
+    lastPos
+    fp = find(dataArray(:,1)==firstPos)
+    lp = find(dataArray(:,1)==lastPos)
+    plot(dataArray(fp:lp,1),dataArray(fp:lp,2))
+    filename_reduce = filename
+    write = testing + '_Rev_0' + string(fi) + '_reduce_'  + '.csv'
+    filename_reduce = filename_reduce + write
+    writematrix(dataArray(fp:lp,1:3),filename_reduce)
+    hold on
+end
+
+legend()
